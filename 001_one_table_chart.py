@@ -6,34 +6,43 @@ import time
 
 # SQLAlchemy 서버 연결
 engine = create_engine('mysql+mysqlconnector://root:aaaaa@localhost/example_data')
+data_range = '100'
 
 def fetch_data(engine, data_range):
-    query = "SELECT * FROM data_table ORDER BY timestamp_column DESC LIMIT "+data_range
+    query = "SELECT * FROM data_table ORDER BY timestamp_column DESC LIMIT "+str(data_range)
     df = pd.read_sql(query, engine)
     return df
 
-# Streamlit 앱 설정
+# Streamlit app setting
 def main():
-    st.title("Live Chart")
-    
+    st.header("Live Chart", divider='blue')
+
+    # Sidebar Dropbox area
     st.sidebar.title("Chart_Control")
-    data_range = st.sidebar.selectbox("Data_Range",["10","20","30","40","50","100"])
-    rerun_time = st.sidebar.selectbox("Rerun_Time (seconds)",["1","3","5","10"])
+    go_stop = st.sidebar.selectbox("Go_stop",["Go","Stop"]) # default "Go"
+    data_range = st.sidebar.selectbox("Data_Range",["10","20","30","40","50","100"]) # query data range
+    rerun_time = st.sidebar.selectbox("Rerun_Time (seconds)",["1","3","5","10"]) # chart rerun time
 
     while True:
-        df = fetch_data(engine, data_range)
+        if go_stop == "Go":
+            df = fetch_data(engine, data_range)
 
-        # 차트 생성
-        fig = px.line(df, x='timestamp_column', y='value_column', title='Stream Data Chart')
-        fig.update_layout(hovermode='x unified')  # 툴팁 표시
-        st.plotly_chart(fig)
+            # new chart
+            st.header("Stream Data Chart")
+            fig = px.line(df, x='timestamp_column', y='value_column')
+            fig.update_layout(hovermode='x unified')  # tooltip set
+            st.plotly_chart(fig)
 
-        # 데이터 테이블
-        st.title("Live Data Table")
-        st.dataframe(df)
+            # data table view
+            st.header("Live Data Table")
+            st.dataframe(df)
 
-        # 업데이트
-        time.sleep(int(rerun_time))
-        st.rerun()
-
+            # update
+            time.sleep(int(rerun_time))
+            st.rerun()
+        elif go_stop == "Stop":
+            
+            st.header("Select_box Value :red['Stop']")
+            break
+            
 main()
