@@ -6,7 +6,6 @@ import time
 
 # SQLAlchemy 서버 연결
 engine = create_engine('mysql+mysqlconnector://root:aaaaa@localhost/example_data')
-data_range = '100'
 
 def fetch_data(engine, data_range):
     query = "SELECT * FROM data_table ORDER BY timestamp_column DESC LIMIT "+str(data_range)
