@@ -1,4 +1,4 @@
-# Streamlit_Live_Chart
+# Streamlit_SQL_Live_Chart
 
 ###### 001_one_table_chart : Basic Chart
 
