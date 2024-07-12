@@ -1,6 +1,6 @@
-# Streamlit_SQL_Live_Chart
+# Streamlit_Data_Chart
 
-###### 001_one_table_chart : Basic Chart
+###### Basic Chart
 
 1. pip install requirements.txt
 2. SQLAlchemy engine set(8 Line)
